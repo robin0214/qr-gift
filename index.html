@@ -3,89 +3,135 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>🍗 배달의민족 쿠폰 선물</title>
+<title>🎁 선물이 도착했어요</title>
 <style>
   :root { --mint:#2ac1bc; --ink:#222; }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body {
     margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    background: linear-gradient(160deg,#d8f5f3 0%, #f7fffe 60%); padding:24px; color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    background:linear-gradient(160deg,#ffe9ef 0%,#e7f7f6 100%); padding:24px; color:var(--ink); overflow-x:hidden;
   }
   .card {
-    width:100%; max-width:420px; background:#fff; border-radius:24px; padding:32px 24px 28px;
-    box-shadow:0 12px 40px rgba(0,0,0,.12); text-align:center;
+    width:100%; max-width:420px; background:#fff; border-radius:26px; padding:36px 24px 30px;
+    box-shadow:0 14px 44px rgba(0,0,0,.14); text-align:center; position:relative; z-index:2;
   }
-  .emoji { font-size:48px; line-height:1; }
-  h1 { font-size:20px; margin:14px 0 4px; }
-  .sub { color:#777; font-size:14px; margin:0 0 24px; }
+
+  /* ---- 1단계: 포장된 선물 ---- */
+  #wrap .gift { font-size:96px; line-height:1; display:inline-block; animation:wiggle 1.6s ease-in-out infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
+  #wrap h1 { font-size:24px; margin:22px 0 6px; }
+  #wrap p { color:#888; font-size:15px; margin:0 0 26px; }
+  .openBtn {
+    border:none; background:var(--mint); color:#fff; font-size:18px; font-weight:800;
+    padding:16px 34px; border-radius:999px; cursor:pointer; box-shadow:0 8px 20px rgba(42,193,188,.4);
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+  /* ---- 2단계: 리빌 ---- */
+  #reveal { display:none; }
+  #reveal.show { display:block; animation:pop .5s cubic-bezier(.2,1.3,.4,1); }
+  @keyframes pop { 0%{transform:scale(.6);opacity:0} 100%{transform:scale(1);opacity:1} }
+  .emoji { font-size:54px; line-height:1; }
+  #reveal h1 { font-size:22px; margin:14px 0 2px; color:var(--mint); }
+  #reveal .sub { color:#777; font-size:14px; margin:0 0 24px; }
   .label { font-size:13px; color:#999; margin-bottom:8px; letter-spacing:.04em; }
   .code-row { display:flex; align-items:stretch; gap:8px; }
   .code {
-    flex:1; font-size:24px; font-weight:700; letter-spacing:.06em; padding:16px 12px;
+    flex:1; font-size:23px; font-weight:700; letter-spacing:.05em; padding:16px 12px;
     background:#f3f6f6; border:2px dashed #cfe6e4; border-radius:14px; color:var(--ink);
     word-break:break-all; display:flex; align-items:center; justify-content:center; min-height:58px;
   }
   button.copy {
     flex:0 0 auto; border:none; background:var(--mint); color:#fff; font-size:15px; font-weight:700;
-    padding:0 16px; border-radius:14px; cursor:pointer; transition:transform .08s, background .2s;
+    padding:0 16px; border-radius:14px; cursor:pointer; transition:transform .08s,background .2s;
   }
   button.copy:active { transform:scale(.94); }
   button.copy.done { background:#37a; }
-  .steps {
-    text-align:left; margin:26px 0 0; padding:18px 18px; background:#fafbfb; border-radius:14px; font-size:14px; color:#555; line-height:1.7;
-  }
+  .steps { text-align:left; margin:24px 0 0; padding:18px; background:#fafbfb; border-radius:14px; font-size:14px; color:#555; line-height:1.7; }
   .steps b { color:var(--ink); }
   .steps ol { margin:8px 0 0; padding-left:20px; }
   .foot { margin-top:18px; font-size:12px; color:#bbb; }
+
+  /* ---- 컨페티 ---- */
+  .confetti { position:fixed; top:-30px; font-size:22px; z-index:1; pointer-events:none; animation:fall linear forwards; }
+  @keyframes fall { to { transform:translateY(110vh) rotate(540deg); opacity:.2; } }
 </style>
 </head>
 <body>
   <div class="card">
-    <div class="emoji">🎁🍗</div>
-    <h1>배달의민족 쿠폰 선물이 도착했어요!</h1>
-    <p class="sub">맛있는 거 시켜 드세요 😋</p>
-
-    <div class="label">쿠폰 코드</div>
-    <div class="code-row">
-      <div class="code" id="code">코드 없음</div>
-      <button class="copy" id="copyBtn">복사</button>
+    <!-- 1단계 -->
+    <div id="wrap">
+      <div class="gift">🎁</div>
+      <h1>마니또 선물이 도착했어요!</h1>
+      <p>안에 뭐가 들었을까요? 🤫</p>
+      <button class="openBtn" id="openBtn">🎀 눌러서 열어보기</button>
     </div>
 
-    <div class="steps">
-      <b>등록 방법</b>
-      <ol>
-        <li>아래 <b>복사</b> 버튼 누르기</li>
-        <li>배민 앱 → <b>마이배민</b></li>
-        <li><b>쿠폰함</b> → <b>쿠폰 등록</b></li>
-        <li>코드 붙여넣기 → 등록 완료!</li>
-      </ol>
+    <!-- 2단계 -->
+    <div id="reveal">
+      <div class="emoji">🍗🎉</div>
+      <h1>배달의민족 쿠폰이에요!</h1>
+      <p class="sub">맛있는 거 시켜 드세요 😋</p>
+
+      <div class="label">쿠폰 코드</div>
+      <div class="code-row">
+        <div class="code" id="code">코드 없음</div>
+        <button class="copy" id="copyBtn">복사</button>
+      </div>
+
+      <div class="steps">
+        <b>등록 방법</b>
+        <ol>
+          <li>위 <b>복사</b> 버튼 누르기</li>
+          <li>배민 앱 → <b>마이배민</b></li>
+          <li><b>쿠폰함</b> → <b>쿠폰 등록</b></li>
+          <li>붙여넣기 → 완료!</li>
+        </ol>
+      </div>
+      <div class="foot">Happy 마니또 🤫</div>
     </div>
-    <div class="foot">Happy 마니또 🤫</div>
   </div>
 
 <script>
-  // 코드는 주소의 # 뒤에서 읽음 → 서버로 전송되지 않아 안전
   var code = decodeURIComponent((location.hash || "").replace(/^#/, "")).trim();
-  var codeEl = document.getElementById("code");
-  var btn = document.getElementById("copyBtn");
-  if (code) codeEl.textContent = code;
+  document.getElementById("code").textContent = code || "코드 없음";
 
-  btn.addEventListener("click", function () {
-    if (!code) return;
-    var done = function () {
-      btn.textContent = "복사됨 ✓";
-      btn.classList.add("done");
-      setTimeout(function () { btn.textContent = "복사"; btn.classList.remove("done"); }, 1800);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(code).then(done, fallback);
-    } else { fallback(); }
-    function fallback() {
-      var t = document.createElement("textarea");
-      t.value = code; t.style.position = "fixed"; t.style.opacity = "0";
-      document.body.appendChild(t); t.focus(); t.select();
-      try { document.execCommand("copy"); done(); } catch (e) { alert("코드: " + code); }
+  function confetti() {
+    var chars = ["🍗","🎉","🎊","✨","🍕","🧧","💛"];
+    for (var i=0;i<26;i++){
+      (function(){
+        var el=document.createElement("div");
+        el.className="confetti"; el.textContent=chars[i%chars.length];
+        el.style.left=Math.random()*100+"vw";
+        el.style.animationDuration=(2+Math.random()*2)+"s";
+        el.style.animationDelay=(Math.random()*0.6)+"s";
+        document.body.appendChild(el);
+        setTimeout(function(){el.remove();},4800);
+      })();
+    }
+  }
+
+  document.getElementById("openBtn").addEventListener("click", function(){
+    document.getElementById("wrap").style.display="none";
+    document.getElementById("reveal").classList.add("show");
+    confetti();
+  });
+
+  var btn=document.getElementById("copyBtn");
+  btn.addEventListener("click", function(){
+    if(!code) return;
+    var done=function(){ btn.textContent="복사됨 ✓"; btn.classList.add("done");
+      setTimeout(function(){btn.textContent="복사"; btn.classList.remove("done");},1800); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(done, fb);
+    } else { fb(); }
+    function fb(){
+      var t=document.createElement("textarea"); t.value=code;
+      t.style.position="fixed"; t.style.opacity="0"; document.body.appendChild(t);
+      t.focus(); t.select();
+      try{ document.execCommand("copy"); done(); }catch(e){ alert("코드: "+code); }
       document.body.removeChild(t);
     }
   });
