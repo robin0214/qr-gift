@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>🍗 배달의민족 쿠폰 선물</title>
+<style>
+  :root { --mint:#2ac1bc; --ink:#222; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: linear-gradient(160deg,#d8f5f3 0%, #f7fffe 60%); padding:24px; color:var(--ink);
+  }
+  .card {
+    width:100%; max-width:420px; background:#fff; border-radius:24px; padding:32px 24px 28px;
+    box-shadow:0 12px 40px rgba(0,0,0,.12); text-align:center;
+  }
+  .emoji { font-size:48px; line-height:1; }
+  h1 { font-size:20px; margin:14px 0 4px; }
+  .sub { color:#777; font-size:14px; margin:0 0 24px; }
+  .label { font-size:13px; color:#999; margin-bottom:8px; letter-spacing:.04em; }
+  .code-row { display:flex; align-items:stretch; gap:8px; }
+  .code {
+    flex:1; font-size:24px; font-weight:700; letter-spacing:.06em; padding:16px 12px;
+    background:#f3f6f6; border:2px dashed #cfe6e4; border-radius:14px; color:var(--ink);
+    word-break:break-all; display:flex; align-items:center; justify-content:center; min-height:58px;
+  }
+  button.copy {
+    flex:0 0 auto; border:none; background:var(--mint); color:#fff; font-size:15px; font-weight:700;
+    padding:0 16px; border-radius:14px; cursor:pointer; transition:transform .08s, background .2s;
+  }
+  button.copy:active { transform:scale(.94); }
+  button.copy.done { background:#37a; }
+  .steps {
+    text-align:left; margin:26px 0 0; padding:18px 18px; background:#fafbfb; border-radius:14px; font-size:14px; color:#555; line-height:1.7;
+  }
+  .steps b { color:var(--ink); }
+  .steps ol { margin:8px 0 0; padding-left:20px; }
+  .foot { margin-top:18px; font-size:12px; color:#bbb; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="emoji">🎁🍗</div>
+    <h1>배달의민족 쿠폰 선물이 도착했어요!</h1>
+    <p class="sub">맛있는 거 시켜 드세요 😋</p>
+
+    <div class="label">쿠폰 코드</div>
+    <div class="code-row">
+      <div class="code" id="code">코드 없음</div>
+      <button class="copy" id="copyBtn">복사</button>
+    </div>
+
+    <div class="steps">
+      <b>등록 방법</b>
+      <ol>
+        <li>아래 <b>복사</b> 버튼 누르기</li>
+        <li>배민 앱 → <b>마이배민</b></li>
+        <li><b>쿠폰함</b> → <b>쿠폰 등록</b></li>
+        <li>코드 붙여넣기 → 등록 완료!</li>
+      </ol>
+    </div>
+    <div class="foot">Happy 마니또 🤫</div>
+  </div>
+
+<script>
+  // 코드는 주소의 # 뒤에서 읽음 → 서버로 전송되지 않아 안전
+  var code = decodeURIComponent((location.hash || "").replace(/^#/, "")).trim();
+  var codeEl = document.getElementById("code");
+  var btn = document.getElementById("copyBtn");
+  if (code) codeEl.textContent = code;
+
+  btn.addEventListener("click", function () {
+    if (!code) return;
+    var done = function () {
+      btn.textContent = "복사됨 ✓";
+      btn.classList.add("done");
+      setTimeout(function () { btn.textContent = "복사"; btn.classList.remove("done"); }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(done, fallback);
+    } else { fallback(); }
+    function fallback() {
+      var t = document.createElement("textarea");
+      t.value = code; t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.focus(); t.select();
+      try { document.execCommand("copy"); done(); } catch (e) { alert("코드: " + code); }
+      document.body.removeChild(t);
+    }
+  });
+</script>
+</body>
+</html>
