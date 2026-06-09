@@ -14,7 +14,7 @@ BASE = "https://robin0214.github.io/qr-gift/"
 URL = BASE + "#" + urllib.parse.quote(CODE)
 OUTDIR = "/Users/robin.lee/app/"
 W, H = 1240, 1748
-FONT = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+FONT = "/Users/robin.lee/Library/Fonts/BMDOHYEON_otf.otf"  # 배달의민족 도현 OTF
 
 def f(size, idx=0): return ImageFont.truetype(FONT, size, index=idx)
 
