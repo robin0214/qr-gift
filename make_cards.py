@@ -40,7 +40,7 @@ def card_mystery():
     d.rounded_rectangle([(W-720)//2,470,(W+720)//2,1190], radius=30, fill="#ffffff")
     q=qr_img(620); img.paste(q,((W-620)//2,520))
     center(d,1260,"스캔하면 정체가 공개됩니다", f(44), gold)
-    center(d,1345,"과연 무엇일까요? 🤫", f(38), "#c7d0e0")
+    center(d,1345,"과연 무엇일까요?", f(38), "#c7d0e0")
     center(d,1560,"From. 당신의 마니또", f(40), gold)
     p=OUTDIR+"card_1_mystery.png"; img.save(p); return p
 
@@ -71,9 +71,9 @@ def card_pink():
     center(d,360,"무엇이 들어있을까요?", f(40), "#9b6b76")
     d.rounded_rectangle([(W-720)//2,450,(W+720)//2,1170], radius=36, fill="#ffffff", outline="#ffd6dd", width=4)
     q=qr_img(600); img.paste(q,((W-600)//2,510))
-    center(d,1230,"여기를 스캔하면 공개! ✨", f(44), pink)
+    center(d,1230,"여기를 스캔하면 공개!", f(44), pink)
     center(d,1340,"카메라로 QR을 비춰보세요", f(36), "#9b6b76")
-    center(d,1560,"Happy 마니또 🤫", f(40), pink)
+    center(d,1560,"Happy 마니또", f(40), pink)
     p=OUTDIR+"card_3_pink.png"; img.save(p); return p
 
 paths=[card_mystery(), card_ticket(), card_pink()]
