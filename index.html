@@ -125,16 +125,17 @@
   var btn=document.getElementById("copyBtn");
   btn.addEventListener("click", function(){
     if(!code) return;
+    var copyCode = code.replace(/\s+/g, "");  // 화면엔 띄어쓰기, 복사는 공백 제거
     var done=function(){ btn.textContent="복사됨 ✓"; btn.classList.add("done");
       setTimeout(function(){btn.textContent="복사"; btn.classList.remove("done");},1800); };
     if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(code).then(done, fb);
+      navigator.clipboard.writeText(copyCode).then(done, fb);
     } else { fb(); }
     function fb(){
-      var t=document.createElement("textarea"); t.value=code;
+      var t=document.createElement("textarea"); t.value=copyCode;
       t.style.position="fixed"; t.style.opacity="0"; document.body.appendChild(t);
       t.focus(); t.select();
-      try{ document.execCommand("copy"); done(); }catch(e){ alert("코드: "+code); }
+      try{ document.execCommand("copy"); done(); }catch(e){ alert("코드: "+copyCode); }
       document.body.removeChild(t);
     }
   });
