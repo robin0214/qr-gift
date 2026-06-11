@@ -47,7 +47,7 @@
   .code {
     flex:1; font-size:23px; font-weight:700; letter-spacing:.05em; padding:16px 12px;
     background:#fff; border:2px dashed var(--gold); border-radius:14px; color:var(--house);
-    word-break:break-all; display:flex; align-items:center; justify-content:center; min-height:58px;
+    white-space:nowrap; overflow:hidden; display:flex; align-items:center; justify-content:center; min-height:58px;
   }
   button.copy {
     flex:0 0 auto; border:none; background:var(--green); color:#fff; font-size:15px; font-weight:700;
@@ -105,6 +105,15 @@
   var code = decodeURIComponent((location.hash || "").replace(/^#/, "")).trim();
   document.getElementById("code").textContent = code || "코드 없음";
 
+  // 번호칸 너비에 맞춰 글자 크기 자동 축소 → 어떤 기기에서도 한 줄 유지
+  function fitCode(){
+    var el=document.getElementById("code");
+    if(!el.offsetParent) return;            // 아직 숨겨진 상태면 패스
+    var size=23; el.style.fontSize=size+"px";
+    while(el.scrollWidth > el.clientWidth && size>11){ size--; el.style.fontSize=size+"px"; }
+  }
+  window.addEventListener("resize", fitCode);
+
   function confetti() {
     var chars = ["☕","🎉","🫘","✨","🟢","💚"];
     for (var i=0;i<26;i++){
@@ -123,6 +132,7 @@
   document.getElementById("openBtn").addEventListener("click", function(){
     document.getElementById("wrap").style.display="none";
     document.getElementById("reveal").classList.add("show");
+    fitCode();
     confetti();
   });
 
